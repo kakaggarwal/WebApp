@@ -7,19 +7,60 @@ namespace WebApp.Helpers
 {
     public static class Logger
     {
-        private string logFileName = "";
-        private string logFileDirectory = "";
+        private static string exceptionLogFileName = "";
+        private static string exceptionLogFileDirectory = "";
+        private static string activityLogFileName = "";
+        private static string activtyLogFileDirectory = "";
 
-        public string LogFileName
+        public static string ExceptionLogFileName
         {
             get
             {
-                if (logFileName.Equals(""))
+                if (exceptionLogFileName.Equals(""))
                 {
-                    logFileName = System.Configuration.ConfigurationManager.AppSettings.Get("ExceptionLogFileName");
+                    exceptionLogFileName = System.Configuration.ConfigurationManager.AppSettings.Get("ExceptionLogFileName");
                 }
 
-                return logFileName;
+                return exceptionLogFileName;
+            }
+        }
+
+        public static string ExceptionLogFileDirectory
+        {
+            get
+            {
+                if (exceptionLogFileDirectory.Equals(""))
+                {
+                    exceptionLogFileDirectory = System.Configuration.ConfigurationManager.AppSettings.Get("ExceptionLogDirectory");
+                }
+
+                return exceptionLogFileDirectory;
+            }
+        }
+
+        public static string ActivityLogFileName
+        {
+            get
+            {
+                if (activityLogFileName.Equals(""))
+                {
+                    activityLogFileName = System.Configuration.ConfigurationManager.AppSettings.Get("ActivityLogFileName");
+                }
+
+                return activityLogFileName;
+            }
+        }
+
+        public static string ActivityLogFileDirectory
+        {
+            get
+            {
+                if (activtyLogFileDirectory.Equals(""))
+                {
+                    activtyLogFileDirectory = System.Configuration.ConfigurationManager.AppSettings.Get("ActivityLogDirectory");
+                }
+
+                return activtyLogFileDirectory;
             }
         }
 
