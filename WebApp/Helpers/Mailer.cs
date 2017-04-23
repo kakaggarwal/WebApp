@@ -8,31 +8,62 @@ namespace WebApp.Helpers
 {
     public static class Mailer
     {
-        private static string fromMailID = System.Configuration.ConfigurationManager.AppSettings.Get("FromMailID");
-        private static string fromMailDisplayName = System.Configuration.ConfigurationManager.AppSettings.Get("FromMailDisplayName");
+        private static string _fromMailID = System.Configuration.ConfigurationManager.AppSettings.Get("FromMailID");
+        private static string _fromMailDisplayName = System.Configuration.ConfigurationManager.AppSettings.Get("FromMailDisplayName");
 
-        private static string smtpHost = System.Configuration.ConfigurationManager.AppSettings.Get("");
-        private static string smtpPort = System.Configuration.ConfigurationManager.AppSettings.Get("");
+        private static string _smtpHost = System.Configuration.ConfigurationManager.AppSettings.Get("smtpHost");
+        private static string _smtpPort = System.Configuration.ConfigurationManager.AppSettings.Get("smtpPort");
+        private static string _smtpUsername = System.Configuration.ConfigurationManager.AppSettings.Get("smtpUsername");
+        private static string _smtpPassword = System.Configuration.ConfigurationManager.AppSettings.Get("smtpPassword");
 
+        private static SmtpClient _smtpClient = null;
 
         private static MailAddress From
         {
             get
             {
-                return new MailAddress(fromMailID, fromMailDisplayName);
+                return new MailAddress(_fromMailID, _fromMailDisplayName);
             }
         }
 
-        public static bool SendMail(string subject, string body, string mailto, string mailtoname)
+        private static SmtpClient SmtpClient
+        {
+            get
+            {
+                if (_smtpClient == null)
+                {
+                    _smtpClient = ConstructSMTPClient();
+                }
+
+                return _smtpClient;
+            }
+        }
+
+        public static bool SendMail(string subject, string body, string mailto, string mailtoname = "", List<Attachment> attachments = null)
         {
             bool success = false;
 
             try
             {
                 MailAddress to = new MailAddress(mailto, mailtoname);
-                MailMessage mailMessage = ConstructMailMessage(subject, body, to);
-                SmtpClient client = ConstructSMTPClient();
+                MailMessage mailMessage;
 
+                if (attachments == null)
+                {
+                    mailMessage = ConstructMailMessage(subject, body, to);
+                }
+                else
+                {
+                    mailMessage = ConstructMailMessage(subject, body, to, attachments);
+                }
+
+                if (mailMessage == null || SmtpClient == null)
+                {
+                    return false;
+                }
+
+                SmtpClient.Send(mailMessage);
+                success = true;
             }
             catch (Exception ex)
             {
@@ -43,7 +74,7 @@ namespace WebApp.Helpers
             return success;
         }
 
-        private static MailMessage ConstructMailMessage(string subject, string body, MailAddress to)
+        private static MailMessage ConstructMailMessage(string subject, string body, MailAddress to, List<Attachment> attachments = null)
         {
             MailMessage mailMessage = new MailMessage(From, to);
 
@@ -55,6 +86,14 @@ namespace WebApp.Helpers
                 mailMessage.IsBodyHtml = true;
                 mailMessage.Body = body;
                 mailMessage.Priority = MailPriority.Normal;
+
+                if (attachments != null)
+                {
+                    foreach (var attachment in attachments)
+                    {
+                        mailMessage.Attachments.Add(attachment);
+                    }
+                }
 
                 Logger.LogActivity("Mail Message Construction Complete");
             }
@@ -69,16 +108,21 @@ namespace WebApp.Helpers
 
         private static SmtpClient ConstructSMTPClient()
         {
-            SmtpClient smtpClient = new SmtpClient();
+            SmtpClient smtpClient = new SmtpClient(_smtpHost);
 
             try
             {
-                smtpClient.Host = "";
+                smtpClient.Port = Convert.ToInt32(_smtpPort);
+                smtpClient.Credentials = new System.Net.NetworkCredential(_smtpUsername, _smtpPassword);
+                smtpClient.EnableSsl = true;
             }
             catch (Exception ex)
             {
+                smtpClient = null;
                 Logger.LogException(ex);
             }
+
+            return smtpClient;
         }
     }
 }
