@@ -23,7 +23,7 @@ namespace WebApp.Helpers
             {
                 string serverPath = HostingEnvironment.MapPath(exceptionLogFileDirectory);
 
-                if (Directory.Exists(serverPath))
+                if (!Directory.Exists(serverPath))
                 {
                     Directory.CreateDirectory(serverPath);
                 }
@@ -51,8 +51,40 @@ namespace WebApp.Helpers
 
                     streamWriter.WriteLine("*************************** Log Entry Ends *************************************");
                 }
+
+                success = true;
             }
             catch(Exception ex)
+            {
+                success = false;
+                string fault = ex.Message;
+            }
+
+            return success;
+        }
+
+        public static bool LogActivity(string activity)
+        {
+            bool success = false;
+
+            try
+            {
+                string serverPath = HostingEnvironment.MapPath(activtyLogFileDirectory);
+
+                if (!Directory.Exists(serverPath))
+                {
+                    Directory.CreateDirectory(serverPath);
+                }
+
+                using (StreamWriter streamWriter = File.AppendText(serverPath + activityLogFileName))
+                {
+                    streamWriter.WriteLine("*************************** Log Entry Begin *************************************");
+                    streamWriter.WriteLine("Log Entry: " + DateTime.Now);
+                    streamWriter.WriteLine("Activity: " + activity);
+                    streamWriter.WriteLine("*************************** Log Entry Ends *************************************");
+                }
+            }
+            catch (Exception ex)
             {
                 success = false;
                 string fault = ex.Message;
