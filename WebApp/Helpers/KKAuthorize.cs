@@ -23,7 +23,8 @@ namespace WebApp.Helpers
             }
             catch (Exception ex)
             {
-                
+                authorize = false;
+                Logger.LogException(ex);
             }
 
             return authorize;

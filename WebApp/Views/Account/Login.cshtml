@@ -1,13 +1,43 @@
-﻿<!DOCTYPE html>
+﻿
+@model WebApp.Models.LoginViewModel
+
+<!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebApp | Login</title>
+
+    <link href="~/Content/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/custom.css" rel="stylesheet" type="text/css" />
 </head>
 <body data-ng-app="WebApp">
-    <div class="">
+    <div class="container-login">
+        <div class="text-center">
+            <a href="@Url.Action("Index", "Home")" class="logo-sm"><span>WebApp</span></a>
+        </div>
+        <section id="LoginFrom">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", required = "required", placeholder = "Username" })
+                            <i class="md md-account-circle form-control-feedback"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
     </div>
 </body>
 </html>
+
+<script type="text/javascript">
+
+</script>
+
