@@ -1,0 +1,33 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,500,700);
+
+
+html{
+    font-family: sans-serif;
+    font-size: 10px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100%;
+    background: #f6f6f6;
+}
+
+body{
+    font-size: 1.4rem;
+    line-height: 1.4857143;
+    background: #f6f6f6;
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    color: #4c5667;
+    padding-bottom: 6.1rem;
+    overflow-x: hidden !important;
+}
+
+div{
+    display: block;
+}
+
+.wrapper-page{
+    margin: 11rem auto;
+    max-width: 36rem;
+}

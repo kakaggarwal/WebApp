@@ -9,8 +9,9 @@ namespace WebApp.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        // GET: Account
-        public ActionResult Index()
+        // GET: Account\Login
+        [AllowAnonymous]
+        public ActionResult Login()
         {
             return View();
         }
