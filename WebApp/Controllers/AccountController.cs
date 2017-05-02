@@ -15,5 +15,11 @@ namespace WebApp.Controllers
         {
             return View();
         }
+
+        // GET: Account\Unauthorized
+        public ActionResult Unauthorized()
+        {
+            return View();
+        }
     }
 }

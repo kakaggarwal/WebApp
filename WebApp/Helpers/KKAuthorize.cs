@@ -29,5 +29,10 @@ namespace WebApp.Helpers
 
             return authorize;
         }
+
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            filterContext.Result = new RedirectResult("~/Account/Unauthorized");
+        }
     }
 }
